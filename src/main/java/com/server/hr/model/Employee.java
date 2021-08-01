@@ -2,8 +2,9 @@ package com.server.hr.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Set;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -44,9 +45,10 @@ public class Employee implements Serializable {
 	private String service_affectation;
 	private String localite;
 	private String photo;
+	private Boolean isArchived = false;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "employee", orphanRemoval = true)
-	private Collection<Leave> leaves;
+	private Set<Leave> leaves = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "department_id")
@@ -74,7 +76,7 @@ public class Employee implements Serializable {
 		this.service_affectation = service_affectation;
 		this.localite = localite;
 		this.photo = photo;
-		this.leaves = new ArrayList<>();
+		this.leaves = new HashSet<>();
 		this.department = department;
 	}
 
@@ -198,12 +200,15 @@ public class Employee implements Serializable {
 		this.photo = photo;
 	}
 
-	public Collection<Leave> getLeaves() {
+	public Set<Leave> getLeaves() {
 		return leaves;
 	}
 
-	public void setLeaves(List<Leave> leaves) {
-		this.leaves = leaves;
+	public void setLeaves(Set<Leave> leaves) {
+		this.leaves.clear();
+		if (leaves != null) {
+			this.leaves.addAll(leaves);
+		}
 	}
 
 	public Department getDepartment() {
@@ -222,6 +227,14 @@ public class Employee implements Serializable {
 				+ ", poste_budgetaire=" + poste_budgetaire + ", service_affectation=" + service_affectation
 				+ ", localite=" + localite + ", photo=" + photo + ", leaves=" + leaves + ", department=" + department
 				+ "]";
+	}
+
+	public Boolean getIsArchived() {
+		return isArchived;
+	}
+
+	public void setIsArchived(Boolean isArchived) {
+		this.isArchived = isArchived;
 	}
 
 }

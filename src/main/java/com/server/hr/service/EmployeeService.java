@@ -35,6 +35,13 @@ public class EmployeeService {
 	public Employee updateEmployee(Employee employee) {
 		return employeeRepo.save(employee);
 	}
+	public List<Employee> getEmployeesByIsArchived(Boolean isArchived) {
+		return employeeRepo.getEmployeeByIsArchived(isArchived);
+	}
+	public void changeEmployeeStatus(Long id) {
+		Employee employee = this.findEmployeeById(id);
+		employee.setIsArchived(!employee.getIsArchived());
+	}
 	public Employee findEmployeeById(Long id) {
 		return employeeRepo.findEmployeeById(id).orElseThrow(()-> new UserNotFoundException("Agent N°" +id+ "pas trouvé"));
 	}
